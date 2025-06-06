@@ -1,12 +1,12 @@
 name: Fetch movie.json every hour
 
 on:
+  push:
   schedule:
-    - cron: '0 * * * *'  # Mỗi giờ
-  workflow_dispatch:      # Cho phép chạy thủ công
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
-permissions:
-  contents: write  # ⬅️ Cho phép commit code vào repo
+permissions: write-all
 
 jobs:
   fetch-and-commit:
@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
 
       - name: Fetch movie data (with retries)
         run: |
@@ -26,3 +26,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add movie.json
           git diff --cached --quiet || (git commit -m "Update movie.json [auto]" && git push)
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 1
