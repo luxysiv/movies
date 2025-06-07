@@ -18,7 +18,7 @@ jobs:
 
       - name: Fetch movie data (with retries)
         run: |
-          curl -s --max-time 300 --retry 3 --retry-delay 10 https://movie.timie.workers.dev/ -o movie.json
+          curl -s --max-time 300 --retry 3 --retry-delay 10 https://phimonline.vercel.app/ -o movie.json
 
       - name: Commit and push if changed
         run: |
